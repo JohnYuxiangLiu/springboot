@@ -22,6 +22,9 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		
 		UserEntity userEntity=new UserEntity();
+				
+//		xtra logic: if email already in db, return exception
+		if(userRepository.findByEmail(user.getEmail())!=null) {throw new RuntimeException("Record already exists");}
 		
 //		from user input to userDto, then userDto to userEntity, properties in userDto and userEntity must match to transfer/copy
 		BeanUtils.copyProperties(user, userEntity);

@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-//this class is to communicate/store/retrieve data from database
+//this class is to communicate/store/retrieve data from database, like a schema
 //users is the db table name
 @Entity(name="users")
 public class UserEntity implements Serializable {
@@ -32,6 +32,7 @@ public class UserEntity implements Serializable {
 	@Column(nullable=false,length=50)
 	private String lastName;
 	
+//	@Column(nullable=false,length=120,unique=true)
 	@Column(nullable=false,length=120)
 	private String email;
 	

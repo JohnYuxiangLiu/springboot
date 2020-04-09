@@ -12,4 +12,9 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
 //	no need to write more crud here, but customised crud can be write here,e.g.
 //	UserEntity findUserByEmail(String email) //return an UserEntity obj by searching email
+	
+//	below is customised crud
+	
+//	findByEmail: return a UserEntity from db
+	UserEntity findByEmail(String email);
 }
