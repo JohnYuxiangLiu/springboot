@@ -2,11 +2,15 @@ package com.appdeveloperblog.app.ws.service.impl;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.appdeveloperblog.app.ws.UserRepository;
 import com.appdeveloperblog.app.ws.io.entity.UserEntity;
 import com.appdeveloperblog.app.ws.service.UserService;
+import com.appdeveloperblog.app.ws.shared.Utils;
 import com.appdeveloperblog.app.ws.shared.dto.UserDto;
 
 //this class is to do customised crud from UserService
@@ -15,7 +19,13 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserRepository userRepository;
-
+	
+	@Autowired
+	Utils utils;
+	
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 	@Override
 //	input is an UserDto obj and output is still a UserDto, it's part of UserController createUser method
 	public UserDto createUser(UserDto user) {
@@ -29,9 +39,13 @@ public class UserServiceImpl implements UserService {
 //		from user input to userDto, then userDto to userEntity, properties in userDto and userEntity must match to transfer/copy
 		BeanUtils.copyProperties(user, userEntity);
 		
+//		generate 30 chars random user id
+		String publicUserId=utils.generateUserId(30);
+				
 //		because encryptedPassword and userId can't be null=false, so hard code here
-		userEntity.setUserId("testUserId");
-		userEntity.setEncryptedPassword("test");
+		userEntity.setUserId(publicUserId);
+//		convert password to encrypted password
+		userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		
 //		use UserRepository to do crud and return a UserEntity obj
 		UserEntity storedUserDetails=userRepository.save(userEntity);		
@@ -40,6 +54,12 @@ public class UserServiceImpl implements UserService {
 		BeanUtils.copyProperties(storedUserDetails, returnValue);
 		
 		return returnValue;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
