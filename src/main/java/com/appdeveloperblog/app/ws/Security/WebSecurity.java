@@ -25,12 +25,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	
 //	disable/permitAll WebSecurity dependencies to allow only post method to pass to "/users" without security password
 //	anyRequest() means any other requests will need to be authenticated, aka protected
+//	default login page localhost:8080/login
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http.csrf().
-		disable().authorizeRequests().antMatchers(HttpMethod.POST,SecurityConstants.SIGN_UP_URL).permitAll();
-//		.anyRequest().authenticated()
-//		.and().addFilter(new AuthenticationFilter(authenticationManager()));
+		disable().authorizeRequests().antMatchers(HttpMethod.POST,SecurityConstants.SIGN_UP_URL).permitAll()
+		.anyRequest().authenticated()
+		.and().addFilter(new AuthenticationFilter(authenticationManager()));
 	}
 	
 //	it's for signin entering plain password to encrypt
