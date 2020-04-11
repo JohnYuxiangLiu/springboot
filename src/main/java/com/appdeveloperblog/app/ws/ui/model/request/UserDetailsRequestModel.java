@@ -1,6 +1,6 @@
 package com.appdeveloperblog.app.ws.ui.model.request;
 
-
+//it's only for user signup
 //to convert json data to java data from user request
 public class UserDetailsRequestModel {
 	

@@ -15,6 +15,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //	UserDetails is manmade extends UserDetailsService interface
 	private final UserService userDetailsService;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+		
 
 	public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		this.userDetailsService=userDetailsService;
@@ -27,10 +28,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http.csrf().
-		disable().authorizeRequests().antMatchers(HttpMethod.POST,"/users").permitAll()
+		disable().authorizeRequests().antMatchers(HttpMethod.POST,"SecurityConstants.SIGN_UP_URL").permitAll()
 		.anyRequest().authenticated();
 	}
 	
+//	it's for signin entering plain password to encrypt
 //	userDetailsService allows customise authentication, and this method is to encrypt the user input password
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {

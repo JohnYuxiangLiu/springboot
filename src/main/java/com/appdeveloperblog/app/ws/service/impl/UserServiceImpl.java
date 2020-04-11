@@ -1,7 +1,10 @@
 package com.appdeveloperblog.app.ws.service.impl;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -57,9 +60,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		return null;
+//		UserServiceImpl impl UserService which impl UserServiceDetails that has a method loadUserByUsername, so you must impl that method here, auto-gen
+		UserEntity userEntity=userRepository.findByEmail(email);
+
+//		it's not going to userDto nor userRequest model
+		if(userEntity==null) throw new UsernameNotFoundException(email)
+
+//		because the User takes a 3rd param that is a collection
+		return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
 	}
 
 }
