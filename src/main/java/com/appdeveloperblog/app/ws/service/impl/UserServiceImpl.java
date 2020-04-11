@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.appdeveloperblog.app.ws.UserRepository;
 import com.appdeveloperblog.app.ws.io.entity.UserEntity;
+import com.appdeveloperblog.app.ws.io.repositories.UserRepository;
 import com.appdeveloperblog.app.ws.service.UserService;
 import com.appdeveloperblog.app.ws.shared.Utils;
 import com.appdeveloperblog.app.ws.shared.dto.UserDto;
@@ -58,6 +58,17 @@ public class UserServiceImpl implements UserService {
 		
 		return returnValue;
 	}
+	
+	@Override
+	public UserDto getUser(String email) {
+		UserEntity userEntity=userRepository.findByEmail(email);
+		
+		if(userEntity==null) throw new UsernameNotFoundException(email);
+		
+		UserDto returnValue=new UserDto();
+		BeanUtils.copyProperties(userEntity, returnValue);
+		return returnValue;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -66,7 +77,7 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity=userRepository.findByEmail(email);
 
 //		it's not going to userDto nor userRequest model
-		if(userEntity==null) throw new UsernameNotFoundException(email)
+		if(userEntity==null) throw new UsernameNotFoundException(email);
 
 //		because the User takes a 3rd param that is a collection
 		return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
